@@ -73,12 +73,6 @@ class Solution:
 
         return count(0, 0, conditions, groups)
 
-    def hashifyConditions(self, conditions: List[str]) -> str:
-        return ''.join(conditions)
-
-    def hashifyGroups(self, groups: List[int]) -> str:
-        return ','.join([str(g) for g in groups])
-
 
 if __name__ == '__main__':
     s = Solution()
