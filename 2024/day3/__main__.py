@@ -8,7 +8,7 @@ from typing import *
 from re import sub, search, findall, compile
 
 class Solution:
-    MUL_RE = r'mul\(([0-9]{1,3},[0-9]{1,3})\)'
+    MUL_RE = r'mul\([0-9]{1,3},[0-9]{1,3}\)'
     COND_RE = r'do(?:n\'t)?\(\)'
 
     def part1(self):
@@ -16,7 +16,7 @@ class Solution:
         with open('./input.txt', 'r') as f:
             inp = f.read()
             for m in findall(self.MUL_RE, inp):
-                n1, n2 = m.split(',')
+                n1, n2 = m[4:-1].split(',')
                 result += int(n1) * int(n2)
         return result
 
@@ -24,20 +24,14 @@ class Solution:
         result = 0
         with open('./input.txt', 'r') as f:
             inp = f.read()
-            instructions = []
-            for m in compile(self.MUL_RE).finditer(inp):
-                instructions.append((m.start(), m))
-            for m in compile(self.COND_RE).finditer(inp):
-                instructions.append((m.start(), m))
-            instructions = sorted(instructions)
             skip = False
-            for _, i in instructions:
-                if i.group() == "don't()":
+            for m in findall(f'{self.MUL_RE}|{self.COND_RE}', inp):
+                if m == "don't()":
                     skip = True
-                elif i.group() == 'do()':
+                elif m == 'do()':
                     skip = False
                 elif not skip:
-                    n1, n2 = i.group(1).split(',')
+                    n1, n2 = m[4:-1].split(',')
                     result += int(n1) * int(n2)
         return result
 
