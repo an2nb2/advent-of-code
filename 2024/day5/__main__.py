@@ -27,22 +27,20 @@ class Solution:
     def part2(self):
         result = 0
         rulesmap, pages = self._readfile()
-        for p in pages:
+        for page in pages:
             eligible = False
-            i = 0
-            prev = set()
-            while i < len(p):
-                if p[i] in rulesmap:
-                    if len(rulesmap[p[i]].intersection(prev)) > 0:
-                        eligible = True
-                        p = [p[i]] + p[:i] + p[i+1:]
-                        i = 0
-                        prev = set()
-                        continue
-                prev.add(p[i])
-                i += 1
+            pageset, prev = set(page), set()
+            n = len(page)
+            for p in page:
+                if len(rulesmap[p].intersection(prev)) > 0:
+                    eligible = True
+                    break
+                prev.add(p)
             if eligible:
-                result += p[len(p)//2]
+                for p in page:
+                    if len(rulesmap[p].intersection(pageset)) == n//2:
+                        result += p
+                        break
         return result
 
     def _readfile(self):
